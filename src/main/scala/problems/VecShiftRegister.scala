@@ -18,8 +18,16 @@ class VecShiftRegister extends Module {
     val out   = Output(UInt(4.W))
   })
   // Implement below ----------
-
-  io.out := 0.U
+  val reg = Reg(Vec(4, {UInt(4.W)}))
+  when(io.load) {
+    reg := io.ins
+  } .elsewhen (io.shift) {
+    reg(0) := reg(3)
+    reg(1) := reg(0)
+    reg(2) := reg(1)
+    reg(3) := reg(2)
+  } 
+  io.out := reg(3)
 
   // Implement above ----------
 }
